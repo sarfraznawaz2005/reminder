@@ -1,0 +1,99 @@
+<Window x:Class="ReminderApp.Views.EditReminderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reminder" Width="480" Height="640" WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize" Icon="pack://application:,,,/Assets/app.ico">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Button HorizontalAlignment="Right" Style="{StaticResource PrimaryButton}" Content="Save" Click="Save_Click"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Title" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                <TextBox x:Name="TitleBox" Margin="0,0,0,14"/>
+
+                <TextBlock Text="Notes" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                <TextBox x:Name="NotesBox" Margin="0,0,0,14"/>
+
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="14"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Repeat" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <ComboBox x:Name="RepeatBox" SelectionChanged="RepeatBox_SelectionChanged">
+                            <ComboBoxItem Content="Once"/>
+                            <ComboBoxItem Content="Hourly"/>
+                            <ComboBoxItem Content="Daily"/>
+                            <ComboBoxItem Content="Weekly"/>
+                            <ComboBoxItem Content="Monthly"/>
+                            <ComboBoxItem Content="Yearly"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" x:Name="TimePanel">
+                        <TextBlock Text="Time" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="HourBox" Width="60" Margin="0,0,4,0"/>
+                            <ComboBox x:Name="MinuteBox" Width="60" Margin="0,0,4,0"/>
+                            <ComboBox x:Name="AmPmBox" Width="60">
+                                <ComboBoxItem Content="AM"/>
+                                <ComboBoxItem Content="PM"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Once: date -->
+                <StackPanel x:Name="OncePanel" Margin="0,0,0,14">
+                    <TextBlock Text="Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                    <DatePicker x:Name="OnceDate"/>
+                </StackPanel>
+
+                <!-- Hourly: minute past the hour -->
+                <StackPanel x:Name="HourlyPanel" Margin="0,0,0,14">
+                    <TextBlock Text="Minute past the hour" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                    <ComboBox x:Name="HourlyMinuteBox" Width="80" HorizontalAlignment="Left"/>
+                </StackPanel>
+
+                <!-- Weekly: day toggles -->
+                <StackPanel x:Name="WeeklyPanel" Margin="0,0,0,14">
+                    <TextBlock Text="Days" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                    <WrapPanel x:Name="WeeklyDaysPanel"/>
+                </StackPanel>
+
+                <!-- Monthly: day grid + clamp -->
+                <StackPanel x:Name="MonthlyPanel" Margin="0,0,0,14">
+                    <TextBlock Text="Days of month" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                    <WrapPanel x:Name="MonthlyDaysPanel"/>
+                    <CheckBox x:Name="MonthlyClampBox" Content="If the month is shorter, use the last day" Margin="0,10,0,0" IsChecked="True"/>
+                </StackPanel>
+
+                <!-- Yearly: month + day + clamp -->
+                <StackPanel x:Name="YearlyPanel" Margin="0,0,0,14">
+                    <TextBlock Text="Month and day" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="YearlyMonthBox" Width="140" Margin="0,0,8,0"/>
+                        <ComboBox x:Name="YearlyDayBox" Width="80"/>
+                    </StackPanel>
+                    <CheckBox x:Name="YearlyClampBox" Content="If Feb 29 doesn't exist this year, use Feb 28" Margin="0,10,0,0" IsChecked="True"/>
+                </StackPanel>
+
+                <TextBlock Text="Ringtone" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                <ComboBox x:Name="RingtoneBox" HorizontalAlignment="Left" Width="160">
+                    <ComboBoxItem Content="Mute"/>
+                    <ComboBoxItem Content="Default"/>
+                    <ComboBoxItem Content="Chime"/>
+                    <ComboBoxItem Content="Alert"/>
+                </ComboBox>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

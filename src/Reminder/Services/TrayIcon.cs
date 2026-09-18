@@ -30,7 +30,11 @@ public sealed class TrayIcon : IDisposable
             ContextMenuStrip = menu,
             Visible = true,
         };
-        _icon.DoubleClick += (_, _) => OpenRequested?.Invoke();
+        _icon.MouseClick += (_, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                OpenRequested?.Invoke();
+        };
     }
 
     static Icon LoadIcon()

@@ -11,7 +11,7 @@
     <Geometry x:Key="IconClose">M5,5 L19,19 M19,5 L5,19</Geometry>
     <Geometry x:Key="IconEdit">M3,17.25 V21 H6.75 L17.81,9.94 L14.06,6.19 Z M20.71,7.04 C21.1,6.65 21.1,6.02 20.71,5.63 L18.37,3.29 C17.98,2.9 17.35,2.9 16.96,3.29 L15.13,5.12 L18.88,8.87 Z</Geometry>
     <Geometry x:Key="IconImportExport">M9,3 L5,7 H8 V14 H10 V7 H13 Z M16,17 V10 H14 V17 H11 L15,21 L19,17 Z</Geometry>
-    <Geometry x:Key="IconPause">M8,5 H10 V19 H8 Z M14,5 H16 V19 H14 Z</Geometry>
-    <Geometry x:Key="IconPlay">M8,5 L19,12 L8,19 Z</Geometry>
+    <!-- Standard power-toggle glyph (circle + vertical tick), used for pause/resume. -->
+    <Geometry x:Key="IconPower">M13,3h-2v10h2V3z M17.83,5.17l-1.42,1.42C17.99,7.86,19,9.81,19,12c0,3.87-3.13,7-7,7s-7-3.13-7-7c0-2.19,1.01-4.14,2.58-5.42L6.17,5.17C4.23,6.82,3,9.26,3,12c0,4.97,4.03,9,9,9s9-4.03,9-9C21,9.26,19.77,6.82,17.83,5.17z</Geometry>
 
 </ResourceDictionary>

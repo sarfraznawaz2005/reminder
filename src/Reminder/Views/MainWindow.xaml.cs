@@ -194,10 +194,22 @@ public partial class MainWindow : Window
         }
     }
 
-    void List_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    void List_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (List.SelectedItem is not ReminderRow row) return;
-        EditSelected(row.Model);
+        if (e.OriginalSource is not DependencyObject source) return;
+
+        var current = source;
+        while (current is not null)
+        {
+            // Let interactive controls (the row checkbox, edit/complete/delete buttons) handle their own click.
+            if (current is CheckBox or System.Windows.Controls.Primitives.ButtonBase) return;
+            if (current is ListBoxItem { DataContext: ReminderRow row })
+            {
+                row.IsSelected = !row.IsSelected;
+                return;
+            }
+            current = System.Windows.Media.VisualTreeHelper.GetParent(current);
+        }
     }
 
     void Edit_Click(object sender, RoutedEventArgs e)

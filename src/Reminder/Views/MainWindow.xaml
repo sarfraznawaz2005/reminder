@@ -57,7 +57,7 @@
         <Grid Grid.Row="1" Background="{StaticResource BgBrush}">
             <ListBox x:Name="List" Margin="16" BorderThickness="0" Background="Transparent"
                      Grid.IsSharedSizeScope="True"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="List_MouseDoubleClick">
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseLeftButtonDown="List_PreviewMouseLeftButtonDown">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="0"/>

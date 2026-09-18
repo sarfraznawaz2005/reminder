@@ -106,6 +106,9 @@ public partial class MainWindow : Window
             _rows.Add(row);
         }
         EmptyText.Visibility = _rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        ActiveTab.Content = $"Active ({_store.Reminders.Count(r => !r.IsCompleted)})";
+        CompletedTab.Content = $"Completed ({_store.Reminders.Count(r => r.IsCompleted)})";
     }
 
     void OnSchedulerTick()

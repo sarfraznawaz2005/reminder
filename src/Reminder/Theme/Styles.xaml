@@ -9,6 +9,8 @@
     <SolidColorBrush x:Key="TextSecondaryBrush" Color="#6B7078"/>
     <SolidColorBrush x:Key="AccentBrush" Color="#2F6FED"/>
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#255BC7"/>
+    <SolidColorBrush x:Key="AccentDarkBrush" Color="#1948B3"/>
+    <SolidColorBrush x:Key="TextSecondaryDarkBrush" Color="#3F434A"/>
 
     <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
 

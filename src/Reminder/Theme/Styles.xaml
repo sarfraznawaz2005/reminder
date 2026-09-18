@@ -29,6 +29,7 @@
 
     <Style x:Key="TabButtonStyle" TargetType="RadioButton">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template" Value="{StaticResource TabButtonTemplate}"/>
     </Style>
 

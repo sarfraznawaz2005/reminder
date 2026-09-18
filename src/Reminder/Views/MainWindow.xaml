@@ -65,7 +65,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListBoxItem">
                                     <Border Background="{StaticResource CardBrush}" BorderBrush="{StaticResource BorderBrush2}"
-                                            BorderThickness="1" CornerRadius="8" Padding="18,12">
+                                            BorderThickness="1" CornerRadius="8" Padding="18,5">
                                         <ContentPresenter/>
                                     </Border>
                                 </ControlTemplate>

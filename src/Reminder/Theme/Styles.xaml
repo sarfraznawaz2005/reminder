@@ -19,14 +19,14 @@
     <ControlTemplate x:Key="TabButtonTemplate" TargetType="RadioButton">
         <Border x:Name="Bd" Padding="2,0" Margin="0,0,28,0" BorderThickness="0,0,0,2" BorderBrush="Transparent"
                 Background="Transparent" VerticalAlignment="Stretch">
-            <TextBlock x:Name="Txt" Text="{TemplateBinding Content}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"
+            <TextBlock x:Name="Txt" Text="{TemplateBinding Content}" FontSize="14" FontWeight="SemiBold"
+                       Foreground="{StaticResource TextSecondaryBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
                 <Setter TargetName="Txt" Property="Foreground" Value="{StaticResource AccentBrush}"/>
-                <Setter TargetName="Txt" Property="FontWeight" Value="SemiBold"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

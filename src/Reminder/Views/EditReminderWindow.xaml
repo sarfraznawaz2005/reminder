@@ -71,6 +71,10 @@
                 <!-- Weekly: day toggles -->
                 <StackPanel x:Name="WeeklyPanel" Margin="0,0,0,14">
                     <TextBlock Text="Days" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,6"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="Weekdays" Style="{StaticResource SecondaryButton}" Padding="10,4" Margin="0,0,8,0" Click="WeekdaysPreset_Click"/>
+                        <Button Content="Weekends" Style="{StaticResource SecondaryButton}" Padding="10,4" Click="WeekendsPreset_Click"/>
+                    </StackPanel>
                     <WrapPanel x:Name="WeeklyDaysPanel"/>
                 </StackPanel>
 

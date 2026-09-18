@@ -58,6 +58,17 @@ public partial class EditReminderWindow : Window
         }
     }
 
+    // _weekdayToggles is indexed by (int)DayOfWeek: Sun=0, Mon=1 ... Sat=6.
+    void WeekdaysPreset_Click(object sender, RoutedEventArgs e) => SetWeekdayToggles(1, 2, 3, 4, 5);
+
+    void WeekendsPreset_Click(object sender, RoutedEventArgs e) => SetWeekdayToggles(0, 6);
+
+    void SetWeekdayToggles(params int[] dayIndexes)
+    {
+        for (int i = 0; i < _weekdayToggles.Count; i++)
+            _weekdayToggles[i].IsChecked = dayIndexes.Contains(i);
+    }
+
     void PopulateMonthdayToggles()
     {
         for (int d = 1; d <= 31; d++)

@@ -8,5 +8,5 @@ if %EXITCODE% NEQ 0 (
 ) else (
     echo Build finished.
 )
-pause
+
 exit /b %EXITCODE%

@@ -17,8 +17,10 @@
     <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
     <ControlTemplate x:Key="TabButtonTemplate" TargetType="RadioButton">
-        <Border x:Name="Bd" Padding="2,20" Margin="0,0,28,0" BorderThickness="0,0,0,2" BorderBrush="Transparent">
-            <TextBlock x:Name="Txt" Text="{TemplateBinding Content}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"/>
+        <Border x:Name="Bd" Padding="2,0" Margin="0,0,28,0" BorderThickness="0,0,0,2" BorderBrush="Transparent"
+                Background="Transparent" VerticalAlignment="Stretch">
+            <TextBlock x:Name="Txt" Text="{TemplateBinding Content}" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsChecked" Value="True">
@@ -32,6 +34,8 @@
     <Style x:Key="TabButtonStyle" TargetType="RadioButton">
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Template" Value="{StaticResource TabButtonTemplate}"/>
     </Style>
 

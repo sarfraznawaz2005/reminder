@@ -109,6 +109,8 @@ public partial class MainWindow : Window
 
         ActiveTab.Content = $"Active ({_store.Reminders.Count(r => !r.IsCompleted)})";
         CompletedTab.Content = $"Completed ({_store.Reminders.Count(r => r.IsCompleted)})";
+
+        UpdateSelectionBar();
     }
 
     void OnSchedulerTick()
@@ -129,6 +131,10 @@ public partial class MainWindow : Window
     void UpdateSelectionBar()
     {
         var selectedCount = _rows.Count(r => r.IsSelected);
+
+        var allSelected = _rows.Count > 0 && selectedCount == _rows.Count;
+        SelectAllButtonSelection.Content = allSelected ? "Deselect all" : "Select all";
+
         if (selectedCount == 0)
         {
             SelectionActions.Visibility = Visibility.Collapsed;
@@ -141,6 +147,13 @@ public partial class MainWindow : Window
         SelectionCountText.Text = selectedCount == 1 ? "1 selected" : $"{selectedCount} selected";
         // Completed items are already complete - only offer this on the Active tab.
         BulkCompleteButton.Visibility = _activeTab == "Active" ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    void SelectAllToggle_Click(object sender, RoutedEventArgs e)
+    {
+        var allSelected = _rows.Count > 0 && _rows.All(r => r.IsSelected);
+        foreach (var row in _rows) row.IsSelected = !allSelected;
+        UpdateSelectionBar();
     }
 
     void BulkDelete_Click(object sender, RoutedEventArgs e)

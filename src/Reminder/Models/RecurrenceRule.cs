@@ -18,6 +18,11 @@ public sealed class RecurrenceRule
     public List<DayOfWeek> DaysOfWeek { get; set; } = new();
     public List<int> DaysOfMonth { get; set; } = new();
 
+    // Fire times for Daily/Weekly/Monthly/Yearly. Same empty-means-derive-from-Anchor pattern
+    // as DaysOfWeek/DaysOfMonth: empty means "just Anchor.TimeOfDay" (today's single-time
+    // behavior); non-empty replaces it so the reminder fires once per listed time.
+    public List<TimeSpan> TimesOfDay { get; set; } = new();
+
     // Monthly: day 31 in a 30-day month fires on the last day instead of being skipped.
     // Yearly: Feb 29 in a non-leap year fires Feb 28 instead of being skipped.
     public bool ClampToMonthEnd { get; set; } = true;

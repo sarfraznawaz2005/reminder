@@ -27,11 +27,18 @@ public sealed class ReminderRow : ObservableObject
     bool _isSelected;
     public bool IsSelected { get => _isSelected; set => Set(ref _isSelected, value); }
 
+    // Mirrors Model.IsEnabled so the pause/resume icon and dimmed row can bind to it -
+    // Reminder itself isn't observable, so bindings straight to Model.IsEnabled wouldn't
+    // update when it changes.
+    bool _isEnabled = true;
+    public bool IsEnabled { get => _isEnabled; private set => Set(ref _isEnabled, value); }
+
     public void Refresh()
     {
         Countdown = TextFormat.Countdown(Model);
         HasCountdown = !string.IsNullOrEmpty(Countdown);
         Schedule = TextFormat.ScheduleSummary(Model.Rule);
+        IsEnabled = Model.IsEnabled;
     }
 
     public void RaiseAll()

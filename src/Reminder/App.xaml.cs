@@ -41,6 +41,12 @@ public partial class App : System.Windows.Application
         _alerts.ShowPopupRequested += r => new AlertPopupWindow(r, _alerts).Show();
         _alerts.DismissPopupRequested += AlertPopupWindow.DismissFor;
 
+        // Start before building MainWindow: its constructor sorts the list by next-fire time,
+        // which needs NextLocal/NextInstantUtc already computed - otherwise every reminder
+        // ties at "unknown" and the first render falls back to file order until something
+        // else (like switching tabs) forces a re-sort later.
+        _scheduler.Start();
+
         _mainWindow = new MainWindow(_store, _scheduler, _alerts, _settings);
 
         _tray = new TrayIcon();
@@ -61,8 +67,6 @@ public partial class App : System.Windows.Application
         if (_settings.StartWithWindows) StartupRegistration.Apply(true);
 
         _singleInstance.ListenForActivation(() => Dispatcher.Invoke(() => _mainWindow.ShowAndActivate()));
-
-        _scheduler.Start();
 
         if (!(startInTray || _settings.StartMinimized))
             _mainWindow.Show();

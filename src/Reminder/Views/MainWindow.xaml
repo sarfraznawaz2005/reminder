@@ -78,6 +78,15 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                            <Setter Property="Opacity" Value="0.5"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="TitleCol"/>
@@ -98,6 +107,30 @@
                                 <TextBlock Text="{Binding Schedule}" FontSize="12" Foreground="{StaticResource TextSecondaryDarkBrush}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Click="TogglePause_Click" Tag="{Binding}">
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource IconButton}">
+                                            <Setter Property="ToolTip" Value="Pause"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                    <Setter Property="ToolTip" Value="Resume"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Path Stretch="Uniform" Width="14" Height="14" Fill="{StaticResource TextSecondaryBrush}">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Data" Value="{StaticResource IconPause}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                        <Setter Property="Data" Value="{StaticResource IconPlay}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
+                                    </Path>
+                                </Button>
                                 <Button Style="{StaticResource IconButton}" Click="Edit_Click" Tag="{Binding}" ToolTip="Edit">
                                     <Path Data="{StaticResource IconEdit}" Fill="{StaticResource TextSecondaryBrush}" Stretch="Uniform" Width="14" Height="14"/>
                                 </Button>

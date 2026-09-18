@@ -7,6 +7,7 @@ public static class TextFormat
 {
     public static string Countdown(Reminder r)
     {
+        if (!r.IsEnabled) return "Paused";
         if (r.SnoozedUntil is not null) return Countdown(r.SnoozedUntil.Value, "Snoozed");
         if (r.NextLocal is null) return r.Rule.Type == RepeatType.Once && r.LastFired is not null ? "Missed" : "";
         return Countdown(r.NextLocal.Value, null);
@@ -29,18 +30,22 @@ public static class TextFormat
     public static string ScheduleSummary(RecurrenceRule rule)
     {
         var time = rule.Anchor.ToString("h:mm:ss tt", CultureInfo.InvariantCulture);
+        var times = TimesText(rule);
 
         return rule.Type switch
         {
             RepeatType.Once => $"Once: {rule.Anchor:ddd d MMM yyyy} ({time})",
             RepeatType.Hourly => $"Hourly: (:{rule.Anchor:mm:ss})",
-            RepeatType.Daily => $"Daily: ({time})",
-            RepeatType.Weekly => $"Weekly: {WeeklyDays(rule)} ({time})",
-            RepeatType.Monthly => $"Monthly: {MonthlyDays(rule)} ({time})",
-            RepeatType.Yearly => $"Yearly: ({rule.Anchor:MM dd} {time})",
+            RepeatType.Daily => $"Daily: ({times})",
+            RepeatType.Weekly => $"Weekly: {WeeklyDays(rule)} ({times})",
+            RepeatType.Monthly => $"Monthly: {MonthlyDays(rule)} ({times})",
+            RepeatType.Yearly => $"Yearly: ({rule.Anchor:MM dd} {times})",
             _ => "",
         };
     }
+
+    static string TimesText(RecurrenceRule rule) => string.Join(", ", RecurrenceCalculator.EffectiveTimes(rule)
+        .Select(t => DateTime.Today.Add(t).ToString("h:mm:ss tt", CultureInfo.InvariantCulture)));
 
     static string WeeklyDays(RecurrenceRule rule)
     {

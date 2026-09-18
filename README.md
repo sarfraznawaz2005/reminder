@@ -7,6 +7,10 @@ A simple, clean, offline reminder app for Windows, built with WPF on .NET 8.
 - Once, hourly, daily, weekly, monthly (multiple days, e.g. 29/30/31), and yearly reminders,
   all anchored to wall-clock time - "daily at 9:00 AM" always means 9:00 AM local time, not
   "24 hours from when you saved it".
+- Daily/weekly/monthly/yearly reminders can fire at more than one time of day - e.g. one
+  "Take medicine" reminder at 8 AM, 1 PM, and 8 PM, instead of three separate reminders.
+- Pause a reminder without deleting or completing it - it stays in the list, just stops firing
+  until you resume it.
 - Reminders survive daylight-saving-time transitions correctly: a reminder that lands in the
   spring-forward gap fires once at the end of the gap, and a reminder in the repeated fall-back
   hour fires exactly once.

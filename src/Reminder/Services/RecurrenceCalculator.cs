@@ -20,6 +20,13 @@ public static class RecurrenceCalculator
         _ => throw new ArgumentOutOfRangeException(nameof(rule)),
     };
 
+    // Sorted so every caller that walks day-by-day naturally visits times in chronological
+    // order within each day.
+    public static List<TimeSpan> EffectiveTimes(RecurrenceRule rule) =>
+        rule.TimesOfDay.Count > 0
+            ? rule.TimesOfDay.OrderBy(t => t).ToList()
+            : new List<TimeSpan> { rule.Anchor.TimeOfDay };
+
     static DateTime? NextOnce(RecurrenceRule rule, DateTime afterLocal) =>
         rule.Anchor > afterLocal ? rule.Anchor : null;
 
@@ -35,28 +42,38 @@ public static class RecurrenceCalculator
 
     static DateTime? NextDaily(RecurrenceRule rule, DateTime afterLocal)
     {
-        var candidate = afterLocal.Date + rule.Anchor.TimeOfDay;
-        if (candidate <= afterLocal) candidate = afterLocal.Date.AddDays(1) + rule.Anchor.TimeOfDay;
-        if (candidate < rule.Anchor) candidate = rule.Anchor;
-        return candidate;
+        var times = EffectiveTimes(rule);
+
+        // The candidate must be both > afterLocal and >= Anchor; folding both into one floor
+        // (Anchor - 1 tick when the rule hasn't started yet) keeps the fixed scan window
+        // correct even when Anchor is further ahead than the window would otherwise cover.
+        var floor = afterLocal >= rule.Anchor ? afterLocal : rule.Anchor.AddTicks(-1);
+
+        for (var d = floor.Date; d <= floor.Date.AddDays(1); d = d.AddDays(1))
+        {
+            foreach (var t in times)
+            {
+                var candidate = d + t;
+                if (candidate > floor) return candidate;
+            }
+        }
+        return null;
     }
 
     static DateTime? NextWeekly(RecurrenceRule rule, DateTime afterLocal)
     {
         var days = rule.DaysOfWeek.Count > 0 ? rule.DaysOfWeek : new List<DayOfWeek> { rule.Anchor.DayOfWeek };
-
-        // The candidate must be both > afterLocal and >= Anchor. Using Anchor - 1 tick as the
-        // floor when the rule hasn't started yet folds both constraints into one comparison,
-        // so the fixed 8-day scan window still starts from the correct date - otherwise a rule
-        // whose Anchor is more than a week ahead of afterLocal could scan right past it and
-        // wrongly return null.
+        var times = EffectiveTimes(rule);
         var floor = afterLocal >= rule.Anchor ? afterLocal : rule.Anchor.AddTicks(-1);
 
         for (var d = floor.Date; d < floor.Date.AddDays(8); d = d.AddDays(1))
         {
             if (!days.Contains(d.DayOfWeek)) continue;
-            var candidate = d + rule.Anchor.TimeOfDay;
-            if (candidate > floor) return candidate;
+            foreach (var t in times)
+            {
+                var candidate = d + t;
+                if (candidate > floor) return candidate;
+            }
         }
         return null;
     }
@@ -64,6 +81,7 @@ public static class RecurrenceCalculator
     static DateTime? NextMonthly(RecurrenceRule rule, DateTime afterLocal)
     {
         var days = rule.DaysOfMonth.Count > 0 ? rule.DaysOfMonth : new List<int> { rule.Anchor.Day };
+        var times = EffectiveTimes(rule);
         var month = new DateTime(afterLocal.Year, afterLocal.Month, 1);
 
         for (int i = 0; i < MaxMonthlyIterations; i++, month = month.AddMonths(1))
@@ -79,8 +97,11 @@ public static class RecurrenceCalculator
 
             foreach (var day in candidates)
             {
-                var candidate = new DateTime(month.Year, month.Month, day) + rule.Anchor.TimeOfDay;
-                if (candidate > afterLocal && candidate >= rule.Anchor) return candidate;
+                foreach (var t in times)
+                {
+                    var candidate = new DateTime(month.Year, month.Month, day) + t;
+                    if (candidate > afterLocal && candidate >= rule.Anchor) return candidate;
+                }
             }
         }
         return null;
@@ -88,6 +109,8 @@ public static class RecurrenceCalculator
 
     static DateTime? NextYearly(RecurrenceRule rule, DateTime afterLocal)
     {
+        var times = EffectiveTimes(rule);
+
         for (int y = afterLocal.Year; y <= afterLocal.Year + MaxYearlyIterations; y++)
         {
             int month = rule.Anchor.Month;
@@ -100,8 +123,11 @@ public static class RecurrenceCalculator
                 day = daysInMonth;
             }
 
-            var candidate = new DateTime(y, month, day) + rule.Anchor.TimeOfDay;
-            if (candidate > afterLocal && candidate >= rule.Anchor) return candidate;
+            foreach (var t in times)
+            {
+                var candidate = new DateTime(y, month, day) + t;
+                if (candidate > afterLocal && candidate >= rule.Anchor) return candidate;
+            }
         }
         return null;
     }

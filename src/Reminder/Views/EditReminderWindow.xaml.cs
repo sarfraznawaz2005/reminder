@@ -13,6 +13,7 @@ public partial class EditReminderWindow : Window
     readonly AppSettings _settings;
     readonly List<ToggleButton> _weekdayToggles = new();
     readonly List<ToggleButton> _monthdayToggles = new();
+    readonly List<TimeSpan> _times = new();
 
     public Reminder? Result { get; private set; }
 
@@ -124,6 +125,10 @@ public partial class EditReminderWindow : Window
         YearlyDayBox.SelectedIndex = (rule.Type == RepeatType.Yearly ? rule.Anchor.Day : DateTime.Today.Day) - 1;
         YearlyClampBox.IsChecked = rule.ClampToMonthEnd;
 
+        _times.Clear();
+        _times.AddRange(rule.TimesOfDay.OrderBy(t => t));
+        RenderTimeChips();
+
         UpdatePanelVisibility();
     }
 
@@ -159,6 +164,56 @@ public partial class EditReminderWindow : Window
 
         // Hourly only needs minute-past-the-hour, not a full time-of-day picker.
         TimePanel.Visibility = type == RepeatType.Hourly ? Visibility.Collapsed : Visibility.Visible;
+
+        bool supportsMultiTime = SupportsMultiTime(type);
+        AddTimeButton.Visibility = supportsMultiTime ? Visibility.Visible : Visibility.Collapsed;
+        TimesChipPanel.Visibility = supportsMultiTime ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    static bool SupportsMultiTime(RepeatType type) =>
+        type is RepeatType.Daily or RepeatType.Weekly or RepeatType.Monthly or RepeatType.Yearly;
+
+    void AddTime_Click(object sender, RoutedEventArgs e)
+    {
+        var t = new TimeSpan(SelectedHour24(), MinuteBox.SelectedIndex < 0 ? 0 : MinuteBox.SelectedIndex, 0);
+        if (!_times.Contains(t)) _times.Add(t);
+        RenderTimeChips();
+    }
+
+    void RenderTimeChips()
+    {
+        TimesChipPanel.Children.Clear();
+        foreach (var t in _times.OrderBy(x => x))
+        {
+            var label = new TextBlock
+            {
+                Text = DateTime.Today.Add(t).ToString("h:mm tt"),
+                FontSize = 12,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = (System.Windows.Media.Brush)FindResource("TextPrimaryBrush"),
+            };
+            var remove = new Button
+            {
+                Content = "✕",
+                FontSize = 9,
+                Padding = new Thickness(6, 0, 0, 0),
+                Background = System.Windows.Media.Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Cursor = System.Windows.Input.Cursors.Hand,
+                Foreground = (System.Windows.Media.Brush)FindResource("TextSecondaryBrush"),
+            };
+            remove.Click += (_, _) => { _times.Remove(t); RenderTimeChips(); };
+
+            var chip = new Border
+            {
+                Background = (System.Windows.Media.Brush)FindResource("BgBrush"),
+                CornerRadius = new CornerRadius(12),
+                Padding = new Thickness(10, 4, 8, 4),
+                Margin = new Thickness(0, 0, 6, 6),
+                Child = new StackPanel { Orientation = Orientation.Horizontal, Children = { label, remove } },
+            };
+            TimesChipPanel.Children.Add(chip);
+        }
     }
 
     int SelectedHour24()
@@ -244,6 +299,12 @@ public partial class EditReminderWindow : Window
                 rule.Anchor = new DateTime(rule.Anchor.Year, month, Math.Min(day, DateTime.DaysInMonth(rule.Anchor.Year, month)),
                     rule.Anchor.Hour, rule.Anchor.Minute, 0);
                 break;
+        }
+
+        if (SupportsMultiTime(type) && _times.Count > 0)
+        {
+            rule.TimesOfDay = _times.OrderBy(t => t).ToList();
+            rule.Anchor = rule.Anchor.Date + rule.TimesOfDay[0];
         }
 
         var reminder = _existing ?? new Reminder();

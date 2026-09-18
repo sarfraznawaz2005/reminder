@@ -218,6 +218,16 @@ public partial class MainWindow : Window
         EditSelected(row.Model);
     }
 
+    void TogglePause_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { Tag: ReminderRow row }) return;
+        row.Model.IsEnabled = !row.Model.IsEnabled;
+        _store.MarkDirty();
+        // Re-enabling after a long pause could leave a stale, long-past NextInstantUtc -
+        // recompute so it picks the true next occurrence instead of firing immediately.
+        _scheduler.RecomputeAll();
+    }
+
     void EditSelected(Reminder model)
     {
         var editor = new EditReminderWindow(model, _settings) { Owner = this };

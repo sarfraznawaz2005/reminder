@@ -11,5 +11,7 @@
     <Geometry x:Key="IconClose">M5,5 L19,19 M19,5 L5,19</Geometry>
     <Geometry x:Key="IconEdit">M3,17.25 V21 H6.75 L17.81,9.94 L14.06,6.19 Z M20.71,7.04 C21.1,6.65 21.1,6.02 20.71,5.63 L18.37,3.29 C17.98,2.9 17.35,2.9 16.96,3.29 L15.13,5.12 L18.88,8.87 Z</Geometry>
     <Geometry x:Key="IconImportExport">M9,3 L5,7 H8 V14 H10 V7 H13 Z M16,17 V10 H14 V17 H11 L15,21 L19,17 Z</Geometry>
+    <Geometry x:Key="IconPause">M8,5 H10 V19 H8 Z M14,5 H16 V19 H14 Z</Geometry>
+    <Geometry x:Key="IconPlay">M8,5 L19,12 L8,19 Z</Geometry>
 
 </ResourceDictionary>

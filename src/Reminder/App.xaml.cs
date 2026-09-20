@@ -64,7 +64,9 @@ public partial class App : System.Windows.Application
         _tray.ExitRequested += () => ExitApplication();
         _mainWindow.ExitRequested += () => ExitApplication();
 
+#if !DEBUG
         if (_settings.StartWithWindows) StartupRegistration.Apply(true);
+#endif
 
         _singleInstance.ListenForActivation(() => Dispatcher.Invoke(() => _mainWindow.ShowAndActivate()));
 

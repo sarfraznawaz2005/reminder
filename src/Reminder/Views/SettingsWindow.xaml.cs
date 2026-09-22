@@ -23,7 +23,7 @@ public partial class SettingsWindow : Window
 
     void LoadFrom(AppSettings s)
     {
-        SnoozeBox.SelectedIndex = s.DefaultSnoozeMinutes switch { 0 => 0, 5 => 1, 30 => 3, 60 => 4, _ => 2 };
+        SnoozeEnabledBox.IsChecked = s.DefaultSnoozeMinutes > 0;
 
         int hour12 = s.DefaultHour % 12 == 0 ? 12 : s.DefaultHour % 12;
         DefaultHourBox.SelectedIndex = hour12 - 1;
@@ -40,7 +40,7 @@ public partial class SettingsWindow : Window
 
     void Save_Click(object sender, RoutedEventArgs e)
     {
-        _settings.DefaultSnoozeMinutes = SnoozeBox.SelectedIndex switch { 0 => 0, 1 => 5, 3 => 30, 4 => 60, _ => 10 };
+        _settings.DefaultSnoozeMinutes = SnoozeEnabledBox.IsChecked == true ? 10 : 0;
 
         int hour12 = DefaultHourBox.SelectedIndex + 1;
         bool pm = DefaultAmPmBox.SelectedIndex == 1;

@@ -70,8 +70,12 @@ public partial class App : System.Windows.Application
 
         _singleInstance.ListenForActivation(() => Dispatcher.Invoke(() => _mainWindow.ShowAndActivate()));
 
-        if (!(startInTray || _settings.StartMinimized))
-            _mainWindow.Show();
+        // WPF requires a window to have been shown at least once before it can be used as
+        // another window's Owner (e.g. Settings). Show then immediately Hide so a
+        // minimized/tray start still satisfies that, with no visible flash.
+        _mainWindow.Show();
+        if (startInTray || _settings.StartMinimized)
+            _mainWindow.Hide();
     }
 
     void ExitApplication()

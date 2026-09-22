@@ -27,12 +27,20 @@ public static class Ringtone
                 PlayTones((988, 90), (988, 90), (988, 90));
                 break;
             default:
-                if (File.Exists(ringtone))
+                if (IsLocalFilePath(ringtone) && File.Exists(ringtone))
                 {
                     try { new SoundPlayer(ringtone).Play(); } catch { /* best effort */ }
                 }
                 break;
         }
+    }
+
+    // Ringtone can come from an imported reminders file, so reject network (UNC) paths here
+    // to stop a crafted import from making the app touch a remote share when a reminder fires.
+    static bool IsLocalFilePath(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || !Path.IsPathRooted(path)) return false;
+        return Uri.TryCreate(path, UriKind.Absolute, out var uri) && uri.IsFile && !uri.IsUnc;
     }
 
     static void PlayTones(params (int hz, int ms)[] tones)

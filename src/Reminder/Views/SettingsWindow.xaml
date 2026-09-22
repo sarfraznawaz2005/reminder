@@ -14,14 +14,7 @@
                    Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
 
         <StackPanel Grid.Row="1">
-            <TextBlock Text="Default snooze" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-            <ComboBox x:Name="SnoozeBox" HorizontalAlignment="Left" Width="120" Margin="0,0,0,16">
-                <ComboBoxItem Content="Off"/>
-                <ComboBoxItem Content="5 minutes"/>
-                <ComboBoxItem Content="10 minutes"/>
-                <ComboBoxItem Content="30 minutes"/>
-                <ComboBoxItem Content="60 minutes"/>
-            </ComboBox>
+            <CheckBox x:Name="SnoozeEnabledBox" Content="Enable snooze" Margin="0,0,0,16"/>
 
             <TextBlock Text="Default time for new reminders" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
